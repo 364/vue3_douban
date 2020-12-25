@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <error v-if="isError" />
     <Suspense v-else>
       <template #default>
@@ -32,9 +32,4 @@ export default {
 };
 </script>
 
-<style lang="less">
-
-#app {
-  background-color: @primary-color;
-}
-</style>
+<style lang="less"></style>

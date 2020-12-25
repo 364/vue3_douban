@@ -5,7 +5,7 @@
       <div class="box-left">
         <div class="box-left-text">
           <strong>404.</strong>
-          <span>That's an error.</span>
+          <em>That's an error.</em>
         </div>
         <div class="box-left-text">
           {{ $store.state.errMsg }} <br />
@@ -30,7 +30,7 @@ export default {
   .bg {
     width: 100%;
     height: 50%;
-    background-color: red;
+    background-color: @bgColor;
   }
   .box {
     position: fixed;
@@ -50,7 +50,7 @@ export default {
       position: absolute;
       width: 100%;
       height: 3px;
-      background-color: #aac5f8;
+      background-color: fade(@primaryColor, 60%);
       top: 0;
       left: 0;
     }
@@ -59,16 +59,21 @@ export default {
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
+      margin: 0 2rem;
       &-text {
-        margin: 2rem;
-        font-size: 1.2rem;
+        padding: 2rem 0;
+        font-size: 1rem;
         color: #999;
         line-height: 1.5;
         strong {
           font-weight: 600;
           margin-right: 10px;
-          color: #555;
+          color: @primaryColor;
           font-size: 2rem;
+        }
+        em {
+          font-size: 1.2rem;
+          color: #555;
         }
       }
     }
