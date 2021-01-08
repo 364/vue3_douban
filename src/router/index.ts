@@ -4,19 +4,10 @@ import Home from "@/views/Home.vue";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    redirect: "/annual2019/movie",
+    redirect: "/annual/2020/movie",
   },
   {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
-  },
-  {
-    path: "/annual2019/:kind",
+    path: "/annual/2020/:kind",
     component: Home,
   },
 ];
@@ -27,7 +18,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const { params } = to;
+  const { params, path } = to;
   const { kind } = params;
   const kinds: object = {
     movie: "电影",
@@ -35,10 +26,11 @@ router.beforeEach((to, from, next) => {
     music: "音乐",
   };
   if (typeof kind == "string" && Reflect.get(kinds, kind)) {
-    next({
-      path: `/annual2019/${kind}`,
-    });
-    document.title = "豆瓣2019 - " + kinds[kind];
+    const arr = path.match(/[0-9]+/g);
+    document.title = `豆瓣${(arr && arr[0]) || "2020"}年度榜单 - ${kinds[kind]}`;
+    next();
+  } else {
+    next("/");
   }
 });
 

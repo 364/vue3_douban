@@ -1,2 +1,60 @@
 @bgColor: #f6f6f6;
 @primaryColor: #3b9047;
+
+.direction(@direction: row) {
+  .flex();
+  flex-direction: @direction;
+}
+
+.justify(@type: center) {
+  .flex();
+  justify-content: @type;
+}
+
+.align(@type: center) {
+  .flex();
+  align-items: @type;
+}
+
+.wrap(@type) {
+  .flex();
+  flex-wrap: @type;
+}
+
+.flex() {
+  display: flex;
+}
+
+.flex-bt(@direction: row) {
+  .flex;
+  .direction(@direction);
+  .justify(space-between);
+}
+
+.flex-center(@direction: row) {
+  .flex;
+  .direction(@direction);
+  .justify();
+  .align();
+}
+
+.ellipsis(@lines) when (@lines = 1) {
+  white-space: nowrap;
+}
+
+.ellipsis(@lines) when (@lines > 1) {
+  display: -webkit-box;
+  -webkit-line-clamp: @lines;
+  -webkit-box-orient: vertical;
+}
+
+.ellipsis(@lines) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.loading {
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+}

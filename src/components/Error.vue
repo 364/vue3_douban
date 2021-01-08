@@ -8,7 +8,7 @@
           <em>That's an error.</em>
         </div>
         <div class="box-left-text">
-          {{ $store.state.errMsg }} <br />
+          <span v-if="error.message">{{ error.message }}</span> <br />
           Failed to load, please refresh again
         </div>
       </div>
@@ -19,8 +19,15 @@
   </div>
 </template>
 <script>
+import { useStore } from "vuex";
+
 export default {
   name: "error",
+  setup(props) {
+    const store = useStore();
+    const error = store.state.error;
+    return { error };
+  },
 };
 </script>
 <style lang="less" scoped>
