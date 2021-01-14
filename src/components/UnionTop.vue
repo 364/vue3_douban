@@ -1,11 +1,13 @@
 <template>
-  <div>union-top</div>
+  <section class="union-top">
+    
+  </section>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "union-top",
 };
 </script>
 
-<style></style>
+<style lang="less" scoped></style>

@@ -1,14 +1,17 @@
 <template>
   <div class="home">
-    <div class="mask">
+    <div class="mask" />
+    <div class="container">
       <component
+        class="w"
         v-for="section in widgets"
         :key="section.id"
-        :is="section.kind_str == 'image' ? 'single-image' : section.kind_str"
+        :is="getIsName(section.kind_str)"
         :payload="section.payload"
         :subject="section.subject"
         :subjects="section.subjects"
-        :user="section.users"
+        :user="section.user"
+        :users="section.users"
         :people="section.people"
         :list="section.lists"
       ></component>
@@ -44,6 +47,8 @@ export default defineComponent({
     const route = useRoute();
     const store = useStore();
     const widgets = computed(() => store.state.info.widgets);
+    const getIsName = (kind_str: string): string =>
+      kind_str == "image" ? "single-image" : kind_str.replace("_", "-");
     try {
       const info: InfoType = await Fetch.get(
         `/${route.params.kind}_annual2020?with_widgets=1`
@@ -53,7 +58,7 @@ export default defineComponent({
         const { res } = info;
         store.commit(GET_ANNUAL_INFO, res);
       }
-      return { info, widgets };
+      return { info, widgets, getIsName };
     } catch (err) {
       onErrorCaptured((e) => {
         store.commit(SET_ERROR_INFO, {
@@ -70,5 +75,10 @@ export default defineComponent({
 <style lang="less" scoped>
 .mask {
   .loading;
+  position: fixed;
+}
+.w {
+  position: relative;
+  color: white;
 }
 </style>

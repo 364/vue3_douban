@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <div class="center" :class="{ xs: isMobile }" v-if="isShow">
+    <div class="center" :class="{ xs: isMobile }">
       <div class="left">
         <i class="logo" :class="{ xs: isMobile }"></i>
         <span class="title">{{ payload.title + payload.sub_title }}</span>
@@ -47,11 +47,19 @@
 </template>
 <script lang="ts">
 import { useStore } from "vuex";
-import { ref, computed, reactive, toRefs, watch, onMounted } from "vue";
+import {
+  ref,
+  computed,
+  reactive,
+  toRefs,
+  onMounted,
+  nextTick,
+  watchEffect,
+} from "vue";
 
 export default {
   name: "fixed-header",
-  setup(props, context) {
+  setup() {
     const audioRef: any | null = ref(null);
     const store = useStore();
     const playIcon: string =
@@ -133,27 +141,26 @@ export default {
     };
 
     onMounted(() => {
-      if (audioRef) {
-        const audio = audioRef.value;
-        audio?.play();
-        audio?.addEventListener("playing", () => (state.isPlaying = true));
-        audio?.addEventListener("pause", () => (state.isPlaying = false));
-        audio?.addEventListener("timeupdate", () => {
-          if (parseInt(audio.currentTime) === parseInt(audio.duration - 1)) {
-            state.index =
-              state.index + 1 == musicList.value.length ? 0 : state.index + 1;
-            audio.load();
+      const audio = audioRef.value;
+      if (!audio) return;
+      audio.play();
+      audio.addEventListener("playing", () => (state.isPlaying = true));
+      audio.addEventListener("pause", () => (state.isPlaying = false));
+      audio.addEventListener("timeupdate", () => {
+        if (parseInt(audio.currentTime) === parseInt(audio.duration) - 1) {
+          state.index =
+            state.index + 1 == musicList.value.length ? 0 : state.index + 1;
+          audio.load();
 
-            fetch(playMusic.value.url)
-              .then(() => {
-                setTimeout(() => {
-                  audio.play();
-                }, audio.duration);
-              })
-              .catch((e) => audio.pause());
-          }
-        });
-      }
+          fetch(playMusic.value.url)
+            .then(() => {
+              setTimeout(() => {
+                audio.play();
+              }, audio.duration);
+            })
+            .catch((e) => audio.pause());
+        }
+      });
     });
 
     return {
@@ -182,6 +189,7 @@ export default {
   height: 40px;
   // background: fade(black, 40%);
   color: white;
+  z-index: 10;
   .flex-center(column);
   .center {
     .flex-bt;
