@@ -7,6 +7,9 @@ module.exports = {
     },
   },
   devServer: {
+    hot: true,
+    compress: true,
+    disableHostCheck: true, //webpack4.0 开启热更新
     proxy: {
       "/api": {
         target: "https://movie.douban.com/ithil_j/activity/", //目标地址

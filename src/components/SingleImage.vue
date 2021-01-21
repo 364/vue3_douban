@@ -11,8 +11,8 @@ import { useStore } from "vuex";
 import { computed, inject, toRefs } from "vue";
 
 interface PayloadType {
-  mobile_background_img?: string;
-  background_img?: string;
+  mobile_background_img: string;
+  background_img: string;
 }
 
 interface PropsType {

@@ -42,6 +42,9 @@ export default {
 .limited {
   .flex;
   .justify(space-between);
+  @media (max-width: 1024px) and (min-width: 900px) {
+    justify-content: flex-start;
+  }
   @media (min-width: 1024px) {
     .flex-center;
     .align(flex-start);
@@ -91,6 +94,10 @@ export default {
         }
         @media (max-width: 1024px) {
           font-size: 0.13rem;
+          width: 0.9rem;
+          span {
+            .ellipsis(1);
+          }
         }
         strong {
           color: #ffac2d;

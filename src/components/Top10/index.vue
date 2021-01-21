@@ -8,7 +8,7 @@
     </div>
     <div class="center">
       <div class="main">
-        <div class="header">
+        <div class="c_header">
           <h3>- {{ info.subtitle }} -</h3>
           <h1>{{ info.topTitle }}</h1>
         </div>
@@ -25,28 +25,28 @@ import exhibit from "./exhibit.vue";
 import limited from "./limited.vue";
 
 interface PayloadType {
-  mobile_background_img?: string;
-  background_img?: string;
-  short_comment?: string;
-  subtitle?: string;
-  title?: string;
+  mobile_background_img: string;
+  background_img: string;
+  short_comment: string;
+  subtitle: string;
+  title: string;
 }
 type subjectType = "movie" | "book" | "music";
 interface SubjectType {
-  id?: string;
-  url?: string;
-  m_url?: string;
-  cover?: string;
-  title?: string;
-  orig_title?: string;
-  type?: subjectType;
-  rating?: number;
-  rating_count?: number;
+  id: string;
+  url: string;
+  m_url: string;
+  cover: string;
+  title: string;
+  orig_title: string;
+  type: subjectType;
+  rating: number;
+  rating_count: number;
 }
 interface UserType {
   [propName: string]: string;
 }
-interface PropsType {
+declare interface TopPropsType {
   payload: PayloadType;
   subject: SubjectType;
   subjects: SubjectType[];
@@ -80,7 +80,7 @@ export default {
       default: () => ({}),
     },
   },
-  setup(props: PropsType) {
+  setup(props: TopPropsType) {
     const { payload, subject, subjects, user } = toRefs(props);
     const { title: topTitle, ...arg } = payload.value;
     const info = computed(() => ({ topTitle, ...arg, ...subject.value }));
@@ -129,33 +129,6 @@ export default {
       @media (min-width: 1024px) {
         margin-left: -36px;
         margin-right: -36px;
-      }
-      .header {
-        text-align: center;
-        line-height: 1.2;
-        margin-bottom: 0.8rem;
-        @media (min-width: 1024px) {
-          margin-bottom: 100px;
-        }
-        h3 {
-          opacity: 0.6;
-          font-size: 15px;
-          color: #fff;
-          letter-spacing: 0;
-          margin-bottom: 0.03rem;
-          @media (min-width: 1024px) {
-            font-size: 25px;
-          }
-        }
-        h1 {
-          font-size: 25px;
-          color: #fff;
-          letter-spacing: 1px;
-          font-weight: 700;
-          @media (min-width: 1024px) {
-            font-size: 40px;
-          }
-        }
       }
     }
   }

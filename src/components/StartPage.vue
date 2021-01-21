@@ -23,8 +23,8 @@ import { useRoute } from "vue-router";
 import { computed, toRefs, ref, inject } from "vue";
 
 interface PayloadType {
-  mobile_background_img?: string;
-  video?: string;
+  mobile_background_img: string;
+  video: string;
 }
 
 interface PropsType {

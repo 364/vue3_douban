@@ -13,7 +13,7 @@
         :user="section.user"
         :users="section.users"
         :people="section.people"
-        :list="section.lists"
+        :lists="section.lists"
       ></component>
     </div>
   </div>
@@ -76,6 +76,9 @@ export default defineComponent({
 .mask {
   .loading;
   position: fixed;
+}
+.container{
+  background: black;
 }
 .w {
   position: relative;
