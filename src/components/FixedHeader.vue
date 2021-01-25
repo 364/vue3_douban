@@ -34,12 +34,16 @@
         <img class="icon" :src="getIcon" alt="play-icon" />
         <span v-if="!isMobile" class="name">{{ getMusicName }}</span>
         <audio
-          class="audio"
           ref="audioRef"
+          class="audio"
+          loop="true"
           preload="auto"
           rel="noreferrer"
-          loop="true"
           :src="playMusic.url"
+          @playing="changePlay(true)"
+          @pause="changePlay(false)"
+          @timeupdate="onTimeUpdate"
+          @canplay="onCanPlay"
         ></audio>
       </div>
     </div>
@@ -47,6 +51,7 @@
 </template>
 <script lang="ts">
 import { useStore } from "vuex";
+import { SET_AUDIO_NODE } from "@/store/mutations-types";
 import {
   ref,
   computed,
@@ -57,6 +62,11 @@ import {
   watchEffect,
 } from "vue";
 
+type shareType = "douban" | "sina";
+interface ShareData {
+  url: string;
+  [propName: string]: string;
+}
 export default {
   name: "fixed-header",
   setup() {
@@ -96,18 +106,10 @@ export default {
           : playMusic.value.name
         : "播放背景音乐"
     );
-    const togglePlay = () => {
-      if (!audioRef) return;
-      !state.isPlaying ? audioRef.value.play() : audioRef.value.pause();
-    };
+    // 分享二维码
     const toggleHover = (flag: boolean): void => {
       state.isHover = isMobile.value ? false : flag;
     };
-    type shareType = "douban" | "sina";
-    interface ShareData {
-      url: string;
-      [propName: string]: string;
-    }
     const shareTo = (t: shareType, data: ShareData): void => {
       const { url, title, content, comment, img } = data;
       switch (t) {
@@ -139,28 +141,33 @@ export default {
           break;
       }
     };
-
-    onMounted(() => {
+    // 音乐操作
+    const togglePlay = () => {
+      if (!audioRef) return;
+      !state.isPlaying ? audioRef.value.play() : audioRef.value.pause();
+    };
+    const changePlay = (flag: boolean) => (state.isPlaying = flag);
+    const onTimeUpdate = () => {
       const audio = audioRef.value;
       if (!audio) return;
-      audio.play();
-      audio.addEventListener("playing", () => (state.isPlaying = true));
-      audio.addEventListener("pause", () => (state.isPlaying = false));
-      audio.addEventListener("timeupdate", () => {
-        if (parseInt(audio.currentTime) === parseInt(audio.duration) - 1) {
-          state.index =
-            state.index + 1 == musicList.value.length ? 0 : state.index + 1;
-          audio.load();
+      if (parseInt(audio.currentTime) === parseInt(audio.duration) - 1) {
+        state.index =
+          state.index + 1 == musicList.value.length ? 0 : state.index + 1;
+        audio.load();
 
-          fetch(playMusic.value.url)
-            .then(() => {
-              setTimeout(() => {
-                audio.play();
-              }, audio.duration);
-            })
-            .catch((e) => audio.pause());
-        }
-      });
+        fetch(playMusic.value.url)
+          .then(() => {
+            setTimeout(() => {
+              audio.play();
+            }, audio.duration);
+          })
+          .catch((e) => audio.pause());
+      }
+    };
+    const onCanPlay = () => audioRef.value?.play();
+    
+    onMounted(() => {
+      store.commit(SET_AUDIO_NODE, audioRef.value);
     });
 
     return {
@@ -174,9 +181,12 @@ export default {
       payload,
       musicList,
       playMusic,
-      togglePlay,
-      toggleHover,
       shareTo,
+      toggleHover,
+      onCanPlay,
+      togglePlay,
+      changePlay,
+      onTimeUpdate,
     };
   },
 };

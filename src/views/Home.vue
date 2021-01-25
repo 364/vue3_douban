@@ -25,9 +25,9 @@ import components from "@/components/index";
 import { computed } from "vue";
 import { useStore } from "vuex";
 import { useRouter, useRoute } from "vue-router";
-import { defineComponent, onErrorCaptured } from "vue";
-import { GET_ANNUAL_INFO, SET_ERROR_INFO } from "@/store/mutations-types";
 import { InfoResProps, InfoStatusProps } from "@/store/types";
+import { defineComponent, onErrorCaptured, provide } from "vue";
+import { GET_ANNUAL_INFO, SET_ERROR_INFO } from "@/store/mutations-types";
 
 interface InfoType {
   r: number;
@@ -43,21 +43,28 @@ export default defineComponent({
   async setup() {
     // 获取路由器实例
     const router = useRouter();
-    // route是响应式对象,可监控器变化
     const route = useRoute();
     const store = useStore();
     const widgets = computed(() => store.state.info.widgets);
+    // 组件名不能为内置标签
+    const labelList = `html,body,base,head,link,meta,style,title,address,article,aside,footer,header,h1,h2,h3,h4,h5,h6,hgroup,nav,section,div,dd,dl,dt,figcaption,figure,picture,hr,img,li,main,ol,p,pre,ul,a,b,abbr,bdi,bdo,br,cite,code,data,dfn,em,i,kbd,mark,q,rp,rt,rtc,ruby,s,samp,small,span,strong,sub,sup,time,u,var,wbr,area,audio,map,track,video,embed,object,param,source,canvas,script,noscript,del,ins,caption,col,colgroup,table,thead,tbody,td,th,tr,button,datalist,fieldset,form,input,label,legend,meter,optgroup,option,output,progress,select,textarea,details,dialog,menu,menuitem,summary,content,element,shadow,template,blockquote,iframe,tfoot,image`.split(
+      ","
+    );
     const getIsName = (kind_str: string): string =>
-      kind_str == "image" ? "single-image" : kind_str.replace("_", "-");
+      labelList.includes(kind_str)
+        ? `single-${kind_str}`
+        : kind_str.replace("_", "-");
+
     try {
+      // 获取数据
       const info: InfoType = await Fetch.get(
         `/${route.params.kind}_annual2020?with_widgets=1`
       );
-      console.log("info", info);
       if (info.status.code == 200) {
         const { res } = info;
         store.commit(GET_ANNUAL_INFO, res);
       }
+      provide("kind", route.params.kind);
       return { info, widgets, getIsName };
     } catch (err) {
       onErrorCaptured((e) => {
@@ -77,7 +84,7 @@ export default defineComponent({
   .loading;
   position: fixed;
 }
-.container{
+.container {
   background: black;
 }
 .w {

@@ -4,7 +4,7 @@
     <template #default>
       <div class="content">
         <FixedHeader />
-        <router-view />
+        <router-view :key="$route.params.kind" />
       </div>
     </template>
     <template #fallback>
@@ -19,8 +19,8 @@ import Loading from "@/components/Loading";
 import FixedHeader from "@/components/FixedHeader";
 import { useStore } from "vuex";
 import { debounce } from "lodash-es";
-import { CHANGE_SCREEN } from "@/store/mutations-types";
 import { computed, ref, watch, provide } from "vue";
+import { CHANGE_SCREEN } from "@/store/mutations-types";
 
 export default {
   name: "app",
@@ -32,6 +32,10 @@ export default {
   setup(props) {
     const store = useStore();
     const screenWidth = ref(document.body.clientWidth);
+    const errorStatus = computed(() => store.state.error.status);
+    const isMobile = computed(() => store.state.isMobile);
+
+    // 是否为移动端
     const onResize = () => {
       screenWidth.value = document.body.clientWidth;
       document.documentElement.style.fontSize =
@@ -39,12 +43,14 @@ export default {
         "px";
       store.commit(CHANGE_SCREEN, screenWidth.value <= 414 ? true : false);
     };
-    const errorStatus = computed(() => store.state.error.status);
-    const isMobile = computed(() => store.state.isMobile);
-
-    provide("isMobile", isMobile);
     window.addEventListener("resize", debounce(onResize, 300));
     document.addEventListener("DOMContentLoaded", onResize, false);
+    document.addEventListener("visibilitychange", function() {
+      const audio = store.state.globalAudio;
+      if (!audio) return;
+      // document.hidden ? audio.pause() : audio.play();
+    });
+    provide("isMobile", isMobile);
 
     return { errorStatus };
   },

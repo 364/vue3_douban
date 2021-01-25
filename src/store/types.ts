@@ -8,6 +8,7 @@ export interface GlobalDataProps {
   loading: boolean;
   isMobile: boolean;
   info: InfoResProps;
+  globalAudio: null | AudioNode;
 }
 
 type status = 0 | 1;

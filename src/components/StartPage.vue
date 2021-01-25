@@ -2,7 +2,11 @@
   <section class="start-page">
     <div
       class="bg-video"
-      :style="isMobile ? { backgroundImage: `url(${bgVideo})` } : {}"
+      :style="
+        isMobile || kind !== 'movie'
+          ? { backgroundImage: `url(https://images.weserv.nl/?url=${bgVideo})` }
+          : {}
+      "
     >
       <div class="main">
         <video loop autoplay muted v-if="!isMobile">
@@ -25,6 +29,7 @@ import { computed, toRefs, ref, inject } from "vue";
 interface PayloadType {
   mobile_background_img: string;
   video: string;
+  background_img: string;
 }
 
 interface PropsType {
@@ -45,17 +50,18 @@ export default {
   },
   setup(props: PropsType) {
     const route = useRoute();
+    const { kind } = route.params;
     const { payload } = toRefs(props);
-    const { mobile_background_img, video } = payload.value;
+    const { mobile_background_img, video, background_img } = payload.value;
     const isMobile = inject("isMobile") as Ref<boolean>;
     const bgVideo = computed(() =>
-      isMobile.value ? mobile_background_img : video
+      isMobile.value ? mobile_background_img : video || background_img
     );
     const bgImgObj = {
       movie: "icon_movie_7f23c30c4c",
+      music: "icon_music_348d101c9e",
       book: "icon_book_0fd04c8451",
     };
-    const { kind } = route.params;
     const bgImg = computed(
       () =>
         `https://img3.doubanio.com/dae/staticng/search_static/ithil/gen/2020/${
@@ -63,9 +69,10 @@ export default {
         }.png`
     );
     return {
-      isMobile,
+      kind,
       bgImg,
       bgVideo,
+      isMobile,
     };
   },
 };

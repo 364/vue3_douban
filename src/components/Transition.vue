@@ -114,7 +114,7 @@ export default {
             const opacity = o > 1 ? 1 : o;
             dom.style.opacity = String(opacity);
             if (opacity <= 1 && opacity >= 0) {
-              const trans = (1 - opacity) * (isMobile.value ? 50 : 100);
+              const trans = (1 - opacity) * (isMobile.value ? 50 : 120);
               const topImg: HTMLElement | null = topImgRef.value;
               const bottomImg: HTMLElement | null = bottomImgRef.value;
               if (!(topImg && bottomImg)) return;
@@ -128,12 +128,12 @@ export default {
 
     return {
       title,
-      cinemaImg,
       textImg,
+      cinemaImg,
       domRef,
-      ...toRefs(data),
       topImgRef,
       bottomImgRef,
+      ...toRefs(data),
     };
   },
 };

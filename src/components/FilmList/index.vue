@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import ListRow from "./box";
+import ListRow from "./box.vue";
 import { inject, toRefs } from "vue";
 
 interface ListsType {

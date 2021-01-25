@@ -5,14 +5,18 @@
     </div>
     <div
       class="bg"
-      :style="{ backgroundImage: `url(${info.header_bg_image})` }"
+      :style="{
+        backgroundImage: `url(https://images.weserv.nl/?url=${info.header_bg_image})`,
+      }"
     >
       <div class="owner">{{ info.owner_name }}</div>
     </div>
     <img class="avatar" :src="info.cover_url" alt="" />
     <div class="info">
       <h1>{{ info.title }}</h1>
-      <span>{{ info.total }}部 · {{ info.n_followers }}人关注</span>
+      <span
+        >{{ info.total }}部 · {{ formatNumber(info.n_followers) }}人关注</span
+      >
     </div>
   </a>
 </template>
@@ -29,6 +33,16 @@ export default {
       type: Number,
       default: 0,
     },
+  },
+  setup() {
+    const formatNumber = (num) => {
+      return num >= 1e3 && num < 1e4
+        ? (num / 1e3).toFixed(1) + "k"
+        : num >= 1e4
+        ? (num / 1e4).toFixed(1) + "w"
+        : num;
+    };
+    return { formatNumber };
   },
 };
 </script>

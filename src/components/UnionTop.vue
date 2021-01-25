@@ -51,7 +51,7 @@
                 :key="cItem.id"
                 :href="isMobile ? cItem.m_url : cItem.url"
               >
-                <div class="cover">
+                <div class="cover" :class="{ music: cItem.type === 'music' }">
                   <div class="c_tag" :class="{ c_top: index < 3 }">
                     <span>{{ index + 1 }}</span>
                   </div>
@@ -105,10 +105,11 @@ interface SubjectType {
 interface TopPropsType {
   payload: PayloadType;
   subject: SubjectType;
-  subjects: SubjectType[];
+  subjects: Array<SubjectType>;
 }
 interface SubPayloadType {
-  widgets: TopPropsType[];
+  column: string;
+  widgets: Array<TopPropsType>;
 }
 interface PropsType {
   payload: SubPayloadType;
@@ -133,9 +134,9 @@ export default {
     const pagination = ref();
     const swiper = ref();
     const active = ref(0);
-    const isMobile = inject("isMobile") as Ref<boolean>;
     const { payload } = toRefs(props);
     const { widgets } = payload.value;
+    const isMobile = inject("isMobile") as Ref<boolean>;
     const current = computed(() => widgets[active.value]);
     const currentIntr = computed(() => current.value["payload"]);
     const currentList = computed(() => current.value["subjects"]);
@@ -233,10 +234,16 @@ export default {
           @media (min-width: 1024px) {
             width: 88px;
             height: 123px;
+            &.music {
+              height: 88px;
+            }
           }
           @media (max-width: 1024px) {
             width: 0.6rem;
             height: 0.84rem;
+            &.music {
+              height: 0.6rem;
+            }
           }
           img {
             height: 100%;

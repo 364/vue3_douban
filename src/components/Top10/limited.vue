@@ -2,7 +2,7 @@
   <ul class="limited">
     <li v-for="(info, index) in subjects.slice(1)" :key="info.id">
       <a target="_blank" :href="isMobile ? info.m_url : info.url">
-        <div class="cover">
+        <div class="cover" :class="{ music: info.type === 'music' }">
           <div class="c_tag" :class="{ c_top: index < 2 }">
             <span>{{ index + 2 }}</span>
           </div>
@@ -76,10 +76,20 @@ export default {
         @media (min-width: 1024px) {
           width: 88px;
           height: 123px;
+          &.music {
+            height: 88px;
+          }
         }
         @media (max-width: 1024px) {
           width: 0.9rem;
           height: 1.26rem;
+          &.music {
+            height: 88px;
+          }
+        }
+        img {
+          object-fit: cover;
+          height: 100%;
         }
       }
       .title {

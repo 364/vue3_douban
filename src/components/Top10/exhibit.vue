@@ -5,7 +5,7 @@
     :title="info.title"
     class="exhibit"
   >
-    <div class="cover">
+    <div class="cover" :class="{ music: info.type === 'music' }">
       <div class="c_tag c_top">
         <span>1</span>
       </div>
@@ -62,7 +62,7 @@ export default {
 <style lang="less" scoped>
 .exhibit {
   .flex;
-  margin-bottom: .18rem;
+  margin-bottom: 0.18rem;
   .cover {
     border: 3px solid rgba(226, 170, 85, 0.6);
     border-radius: 9px;
@@ -72,10 +72,16 @@ export default {
     @media (min-width: 1024px) {
       width: 88px;
       height: 123px;
+      &.music {
+        height: 88px;
+      }
     }
     @media (max-width: 1024px) {
       width: 0.9rem;
       height: 1.26rem;
+      &.music {
+        height: 0.9rem;
+      }
     }
   }
   .info {

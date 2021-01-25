@@ -1,10 +1,7 @@
 <template>
   <section class="c_wrapper top10">
     <div class="bg">
-      <img
-        :src="isMobile ? info.mobile_background_img : info.background_img"
-        :alt="info.title"
-      />
+      <img :src="bgImg" :alt="info.title" />
     </div>
     <div class="center">
       <div class="main">
@@ -14,6 +11,11 @@
         </div>
         <exhibit :info="info" :user="user" :isMobile="isMobile"></exhibit>
         <limited :subjects="subjects" :isMobile="isMobile"></limited>
+        <div class="btn" v-if="payload.ad_button_text">
+          <a target="_blank" :href="payload.ad_button_uri">{{
+            payload.ad_button_text
+          }}</a>
+        </div>
       </div>
     </div>
   </section>
@@ -25,6 +27,8 @@ import exhibit from "./exhibit.vue";
 import limited from "./limited.vue";
 
 interface PayloadType {
+  ad_button_text?: string;
+  ad_button_uri?: string;
   mobile_background_img: string;
   background_img: string;
   short_comment: string;
@@ -85,7 +89,13 @@ export default {
     const { title: topTitle, ...arg } = payload.value;
     const info = computed(() => ({ topTitle, ...arg, ...subject.value }));
     const isMobile = inject("isMobile") as Ref<boolean>;
-    return { isMobile, info, user, subjects };
+    const bgImg = computed(() => {
+      const { mobile_background_img, background_img } = info.value;
+      return isMobile.value
+        ? mobile_background_img
+        : background_img || mobile_background_img;
+    });
+    return { isMobile, info, user, subjects, bgImg };
   },
 };
 </script>
@@ -129,6 +139,21 @@ export default {
       @media (min-width: 1024px) {
         margin-left: -36px;
         margin-right: -36px;
+      }
+    }
+    .btn {
+      .flex-center;
+      margin-top: 0.4rem;
+      a {
+        border-radius: 10px;
+        font-size: 16px;
+        color: #fff;
+        letter-spacing: 0.5px;
+        text-align: center;
+        padding: 12px 25px;
+        display: inline-block;
+        box-shadow: 0 2px 0 rgba(217, 159, 71, 0.7);
+        background-image: linear-gradient(90deg, #d99f47, #ce8d2a);
       }
     }
   }
