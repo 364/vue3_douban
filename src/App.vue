@@ -49,6 +49,7 @@ export default {
       const audio = store.state.globalAudio;
       if (!audio) return;
       // document.hidden ? audio.pause() : audio.play();
+      document.hidden ? audio.pause() : '';
     });
     provide("isMobile", isMobile);
 

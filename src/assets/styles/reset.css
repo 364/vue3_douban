@@ -143,3 +143,10 @@ a {
     text-decoration: none;
     color: inherit;
 }
+
+/* ======= */
+
+html,
+body {
+    background-color: black;
+}

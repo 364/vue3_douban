@@ -12,7 +12,7 @@
             <img :src="item.cover" :alt="item.name" />
             <div class="info">
               <div>{{ item.name }}</div>
-              <span v-if="item.type === 'author'"
+              <span v-if="item.type === 'author' && item.age"
                 >{{ item.profession }} {{ item.age }}</span
               >
             </div>

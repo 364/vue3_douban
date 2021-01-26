@@ -31,7 +31,7 @@ export default {
   setup() {
     const formatText = (str) => {
       return (
-        "<p>" + str.replace(/(.*)\[(.*)\](.*)/, "$1<span>$2</span>$3") + "</p>"
+        "<p>" + str.replace(/(.*)\[(.*)\](.*)/, "$1<span style='border-bottom: 1px solid'>$2</span>$3") + "</p>"
       );
     };
     return { formatText };
@@ -51,11 +51,14 @@ export default {
     box-sizing: border-box;
     border-radius: 2px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    padding-bottom: 40px;
     @media (min-width: 1024px) {
       padding-right: 30px;
       min-height: 500px;
       margin: 0 auto;
-      padding-bottom: 40px;
+    }
+    @media (max-width: 1024px) {
+      padding-right: 40px;
     }
     .left {
       background-image: url(https://images.weserv.nl/?url=https://img3.doubanio.com/img/files/file-1575626423.png);
@@ -65,6 +68,11 @@ export default {
       @media (min-width: 1024px) {
         width: 80px;
         height: 395px;
+      }
+      @media (max-width: 1024px) {
+        width: 50px;
+        height: 247px;
+        margin-right: 10px;
       }
     }
     .snippet {
@@ -84,15 +92,21 @@ export default {
       .text,
       .info {
         color: rgba(0, 0, 0, 0.7);
-        font-family: STFangsong, Fangsong, FangSong_GB2312, STSong, serif;
+        @media (min-width: 1024px) {
+          font-family: STFangsong, Fangsong, FangSong_GB2312, STSong, serif;
+        }
       }
       .text {
+        display: inline-block;
+        vertical-align: text-top;
+        text-align: justify;
         @media (min-width: 1024px) {
           font-size: 16px;
           line-height: 40px;
         }
-        span {
-          border-bottom: 1px solid #000;
+        @media (max-width: 1024px) {
+          font-size: 0.16rem;
+          line-height: 0.32rem;
         }
       }
       .info {
@@ -105,9 +119,13 @@ export default {
             font-size: 16px;
           }
         }
-        :last-child{
+        :last-child {
+          color: rgba(0, 0, 0, 0.5);
           @media (min-width: 1024px) {
             font-size: 11px;
+          }
+          @media (max-width: 1024px) {
+            font-size: 0.11rem;
           }
         }
       }
